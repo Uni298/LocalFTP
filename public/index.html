@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -68,26 +68,26 @@
 </head>
 <body>
 <header>
-  <button id="upBtn" title="親ディレクトリへ">⬆ 上へ</button>
+  <button id="upBtn" title="To the parent directory">UP</button>
   <div class="crumbs" id="crumbs"></div>
-  <input id="pathInput" type="text" placeholder="パスを入力（例: /usr/local）" />
-  <button id="goBtn">移動</button>
+  <input id="pathInput" type="text" placeholder="Enter the path (Example: /usr/local）" />
+  <button id="goBtn">Move</button>
 </header>
 
 <main>
   <div class="toolbar">
-    <button id="newFileBtn">新規ファイル</button>
-    <button id="newDirBtn">新規ディレクトリ</button>
+    <button id="newFileBtn">New file</button>
+    <button id="newDirBtn">New directory</button>
     <div class="upload">
       <form id="uploadForm">
         <input id="fileInput" type="file" name="file" />
-        <button type="submit">アップロード</button>
+        <button type="submit">Upload</button>
       </form>
     </div>
-    <div class="segmented" role="tablist" aria-label="表示モード">
-      <button id="viewListBtn" class="active" role="tab" aria-selected="true" title="一覧">一覧</button>
-      <button id="viewGridVBtn" role="tab" aria-selected="false" title="カード縦">カード縦</button>
-      <button id="viewGridHBtn" role="tab" aria-selected="false" title="カード横">カード横</button>
+    <div class="segmented" role="tablist" aria-label=View mode">
+      <button id="viewListBtn" class="active" role="tab" aria-selected="true" title="">List</button>
+      <button id="viewGridVBtn" role="tab" aria-selected="false" title="カード縦">Card</button>
+      <button id="viewGridHBtn" role="tab" aria-selected="false" title="カード横">Card side</button>
     </div>
   </div>
 
@@ -96,12 +96,12 @@
   <table id="tableView">
     <thead>
       <tr>
-        <th>名前</th>
-        <th>種類</th>
-        <th>サイズ</th>
-        <th>更新日時</th>
+        <th>Name</th>
+        <th>Types</th>
+        <th>Size</th>
+        <th>Date</th>
         <th>R/W</th>
-        <th>操作</th>
+        <th>Management</th>
       </tr>
     </thead>
     <tbody id="tbody">
