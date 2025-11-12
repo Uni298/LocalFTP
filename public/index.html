@@ -85,9 +85,9 @@
       </form>
     </div>
     <div class="segmented" role="tablist" aria-label=View mode">
-      <button id="viewListBtn" class="active" role="tab" aria-selected="true" title="">List</button>
-      <button id="viewGridVBtn" role="tab" aria-selected="false" title="カード縦">Card</button>
-      <button id="viewGridHBtn" role="tab" aria-selected="false" title="カード横">Card side</button>
+      <button id="viewListBtn" class="active" role="tab" aria-selected="true" title="list">List</button>
+      <button id="viewGridVBtn" role="tab" aria-selected="false" title="card">Card</button>
+      <button id="viewGridHBtn" role="tab" aria-selected="false" title="card side">Card side</button>
     </div>
   </div>
 
@@ -105,7 +105,7 @@
       </tr>
     </thead>
     <tbody id="tbody">
-      <tr><td class="empty" colspan="6">読み込み中...</td></tr>
+      <tr><td class="empty" colspan="6">Loading...</td></tr>
     </tbody>
   </table>
 
@@ -122,8 +122,8 @@
       <div id="editWarn" class="warn" style="display:none"></div>
     </div>
     <footer>
-      <button id="saveBtn">保存</button>
-      <button id="cancelBtn">閉じる</button>
+      <button id="saveBtn">Save</button>
+      <button id="cancelBtn">Close</button>
     </footer>
   </div>
 </div>
@@ -228,7 +228,7 @@
 
   async function load(pathLike){
     // skeleton
-    tbody.innerHTML = '<tr><td class="empty" colspan="6">読み込み中...</td></tr>';
+    tbody.innerHTML = '<tr><td class="empty" colspan="6">Loading...</td></tr>';
     gridView.innerHTML = '';
     try{
       const data = await api('/api/list', { qs: { path: pathLike ?? state.cwd } });
@@ -238,7 +238,7 @@
       render(data.items);
       setStatus(`OK: ${state.cwd}`);
     }catch(e){
-      tbody.innerHTML = '<tr><td class="empty" colspan="6">アクセスできません</td></tr>';
+      tbody.innerHTML = '<tr><td class="empty" colspan="6">Cant access</td></tr>';
       gridView.innerHTML = '';
       setStatus(e.message, true);
     }
@@ -261,7 +261,7 @@
 
   function renderTable(items){
     if (!items || !items.length){
-      tbody.innerHTML = '<tr><td class="empty" colspan="6">空です</td></tr>';
+      tbody.innerHTML = '<tr><td class="empty" colspan="6">Empty</td></tr>';
       return;
     }
     tbody.innerHTML = '';
@@ -287,20 +287,20 @@
       tdPerm.appendChild(r); tdPerm.appendChild(w);
 
       const tdAct = document.createElement('td'); tdAct.className='actions';
-      const openBtn = document.createElement('button'); openBtn.textContent = it.type==='dir'?'開く':'編集';
+      const openBtn = document.createElement('button'); openBtn.textContent = it.type==='dir'?'Open':'Edit';
       openBtn.onclick = ()=> { if (it.type==='dir') cd(it.path); else openFile(it); };
       tdAct.appendChild(openBtn);
 
-      const renBtn = document.createElement('button'); renBtn.textContent = 'リネーム';
+      const renBtn = document.createElement('button'); renBtn.textContent = 'Rename';
       renBtn.onclick = ()=> renameItem(it);
       tdAct.appendChild(renBtn);
 
-      const delBtn = document.createElement('button'); delBtn.textContent = '削除'; delBtn.className='danger';
+      const delBtn = document.createElement('button'); delBtn.textContent = 'Delete'; delBtn.className='danger';
       delBtn.onclick = ()=> deleteItem(it);
       tdAct.appendChild(delBtn);
 
       if (it.type === 'file') {
-        const dlBtn = document.createElement('button'); dlBtn.textContent = 'ダウンロード';
+        const dlBtn = document.createElement('button'); dlBtn.textContent = 'Downlaod';
         dlBtn.onclick = ()=> downloadItem(it);
         tdAct.appendChild(dlBtn);
       }
@@ -315,7 +315,7 @@
     if (!items || !items.length){
       const empty = document.createElement('div');
       empty.className = 'empty';
-      empty.textContent = '空です';
+      empty.textContent = 'Empty';
       gridView.appendChild(empty);
       return;
     }
@@ -339,20 +339,20 @@
       perm.appendChild(r); perm.appendChild(w);
 
       const acts = document.createElement('div'); acts.className='actions';
-      const openBtn = document.createElement('button'); openBtn.textContent = it.type==='dir'?'開く':'編集';
+      const openBtn = document.createElement('button'); openBtn.textContent = it.type==='dir'?'Open':'Edit';
       openBtn.onclick = ()=> { if (it.type==='dir') cd(it.path); else openFile(it); };
       acts.appendChild(openBtn);
 
-      const renBtn = document.createElement('button'); renBtn.textContent = 'リネーム';
+      const renBtn = document.createElement('button'); renBtn.textContent = 'Rename';
       renBtn.onclick = ()=> renameItem(it);
       acts.appendChild(renBtn);
 
-      const delBtn = document.createElement('button'); delBtn.textContent = '削除'; delBtn.className='danger';
+      const delBtn = document.createElement('button'); delBtn.textContent = 'Delete'; delBtn.className='danger';
       delBtn.onclick = ()=> deleteItem(it);
       acts.appendChild(delBtn);
 
       if (it.type === 'file') {
-        const dlBtn = document.createElement('button'); dlBtn.textContent = 'ダウンロード';
+        const dlBtn = document.createElement('button'); dlBtn.textContent = 'Download';
         dlBtn.onclick = ()=> downloadItem(it);
         acts.appendChild(dlBtn);
       }
@@ -373,29 +373,29 @@
       editingPath = it.path;
       editTitle.textContent = it.path;
       editMeta.textContent = `${fmtSize(data.size)} ・ ${fmtDate(data.mtime)}`;
-      editor.value = data.binary ? '(バイナリファイルは編集できません)' : (data.tooLarge ? '(大きすぎるためプレビュー省略)' : data.content || '');
+      editor.value = data.binary ? 'Cant edit binary file.' : (data.tooLarge ? 'It too large.' : data.content || '');
       editWarn.style.display = (data.binary || data.tooLarge) ? 'block' : 'none';
-      editWarn.textContent = data.binary ? 'このファイルはバイナリの可能性が高いため編集できません。' :
-                           (data.tooLarge ? '2MBを超えるためブラウザ編集は無効化しました。' : '');
+      editWarn.textContent = data.binary ? 'Cant edit binary file.' :
+                           (data.tooLarge ? 'It too large, so cant edit.' : '');
       editor.readOnly = !!(data.binary || data.tooLarge || !data.writable);
       saveBtn.disabled = editor.readOnly;
       editorModal.classList.add('show');
     }catch(e){
-      alert('読み込み失敗: ' + e.message);
+      alert('Read failed: ' + e.message);
     }
   }
 
   async function renameItem(it){
-    const to = prompt('新しいパスまたは名前を入力', it.path);
+    const to = prompt('New path or name', it.path);
     if (!to || to===it.path) return;
     try { await api('/api/rename', { method:'POST', body:{ src: it.path, dest: to } }); await load(); }
-    catch(e){ alert('失敗: ' + e.message); }
+    catch(e){ alert('Error: ' + e.message); }
   }
 
   async function deleteItem(it){
-    if (!confirm(`本当に削除しますか？\n${it.path}`)) return;
+    if (!confirm(`Are you ok?\n${it.path}`)) return;
     try { await api('/api/delete', { method:'POST', body:{ path: it.path } }); await load(); }
-    catch(e){ alert('削除失敗: ' + e.message); }
+    catch(e){ alert('Delete failed: ' + e.message); }
   }
 
   function downloadItem(it){
@@ -411,7 +411,7 @@
       editorModal.classList.remove('show');
       await load();
     }catch(e){
-      alert('保存失敗: ' + e.message);
+      alert('Save failed: ' + e.message);
     }
   };
   cancelBtn.onclick = ()=> editorModal.classList.remove('show');
@@ -425,34 +425,34 @@
   // New file/dir
   newFileBtn.onclick = async ()=>{
     const base = state.cwd.endsWith('/') || state.cwd.endsWith('\\') ? state.cwd : state.cwd + '/';
-    const p = prompt('作成するファイルのフルパス', base + 'newfile.txt');
+    const p = prompt('Fullpath on newfile', base + 'newfile.txt');
     if (!p) return;
     try{ await api('/api/newfile', { method:'POST', body:{ path: p } }); await load(); }
-    catch(e){ alert('作成失敗: ' + e.message); }
+    catch(e){ alert('Create failed: ' + e.message); }
   };
   newDirBtn.onclick = async ()=>{
     const base = state.cwd.endsWith('/') || state.cwd.endsWith('\\') ? state.cwd : state.cwd + '/';
-    const p = prompt('作成するディレクトリのフルパス', base + 'newdir');
+    const p = prompt('Fullpath on new directory', base + 'newdir');
     if (!p) return;
     try{ await api('/api/mkdir', { method:'POST', body:{ path: p } }); await load(); }
-    catch(e){ alert('作成失敗: ' + e.message); }
+    catch(e){ alert('Create failed: ' + e.message); }
   };
 
   // Upload
   uploadForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const f = fileInput.files && fileInput.files[0];
-    if (!f) { alert('ファイルを選択してください'); return; }
+    if (!f) { alert('Please select file'); return; }
     try {
       const form = new FormData();
       form.append('file', f);
       form.append('dir', state.cwd); // upload into current directory
       await api('/api/upload', { method: 'POST', body: form });
-      setStatus(`アップロード完了: ${f.name}`);
+      setStatus(`Done upload: ${f.name}`);
       fileInput.value = '';
       await load();
     } catch (err) {
-         alert('アップロード失敗: ' + err.message);
+         alert('Upload failed: ' + err.message);
     }
   });
 
