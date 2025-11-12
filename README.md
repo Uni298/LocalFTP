@@ -1,5 +1,7 @@
 # LocalFTP
 
+This is an FTP service that allows you to manipulate files using a browser.
+
 ## How to run
 
 1. Clone this repository
@@ -15,4 +17,5 @@ npm install
 node app.js
 ```
 4. Access at your browser
+
 `https://localhost:8127/`
